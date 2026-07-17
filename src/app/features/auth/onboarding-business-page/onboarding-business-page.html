@@ -1,0 +1,58 @@
+<div class="flex min-h-screen items-center justify-center bg-slate-50 px-6 py-12">
+  <div class="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm">
+    <div class="flex items-center gap-2">
+      <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-600 text-white">📅</span>
+      <span class="text-lg font-bold text-slate-900">Slotify</span>
+    </div>
+
+    <h1 class="mt-6 text-xl font-bold text-slate-900">Set up your business</h1>
+    <p class="mt-1 text-sm text-slate-500">You can always change these settings later from Settings.</p>
+
+    @if (loading()) {
+      <app-spinner />
+    } @else {
+      <form class="mt-6 space-y-5" [formGroup]="form" (ngSubmit)="submit()">
+        <div>
+          <label for="name" class="block text-sm font-medium text-slate-700">Business name</label>
+          <input
+            id="name"
+            type="text"
+            formControlName="name"
+            class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+          />
+          <app-field-error [control]="form.controls.name" />
+        </div>
+
+        <div>
+          <label for="timezone" class="block text-sm font-medium text-slate-700">Timezone</label>
+          <select
+            id="timezone"
+            formControlName="timezone"
+            class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+          >
+            @for (tz of timezones; track tz) {
+              <option [value]="tz">{{ tz }}</option>
+            }
+          </select>
+          <app-field-error [control]="form.controls.timezone" />
+        </div>
+
+        <div>
+          <label for="address" class="block text-sm font-medium text-slate-700">Address <span class="font-normal text-slate-400">(optional)</span></label>
+          <input
+            id="address"
+            type="text"
+            formControlName="address"
+            placeholder="1234 Oak Street, Portland"
+            class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+          />
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <a routerLink="/dashboard" class="text-sm font-semibold text-slate-500 hover:text-slate-700">Skip for now</a>
+          <app-button type="submit" [loading]="submitting()">Go to dashboard</app-button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

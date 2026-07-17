@@ -1,0 +1,33 @@
+<div>
+  <h1 class="text-2xl font-bold text-slate-900">Choose a staff member</h1>
+  <p class="mt-1 text-slate-500">Or let us find the best available slot.</p>
+
+  @if (loading()) {
+    <app-spinner />
+  } @else {
+    <div class="mt-6 space-y-3">
+      <button
+        type="button"
+        (click)="chooseAny()"
+        class="flex w-full items-center gap-4 rounded-xl border border-slate-200 bg-white p-5 text-left hover:border-brand-400 hover:shadow-sm"
+      >
+        <span class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500">👥</span>
+        <div>
+          <h3 class="font-semibold text-slate-900">Any available</h3>
+          <p class="text-sm text-slate-500">We'll match you with the first available team member.</p>
+        </div>
+      </button>
+
+      @for (member of staff(); track member.id) {
+        <button
+          type="button"
+          (click)="choose(member)"
+          class="flex w-full items-center gap-4 rounded-xl border border-slate-200 bg-white p-5 text-left hover:border-brand-400 hover:shadow-sm"
+        >
+          <app-avatar [name]="member.name" />
+          <h3 class="font-semibold text-slate-900">{{ member.name }}</h3>
+        </button>
+      }
+    </div>
+  }
+</div>

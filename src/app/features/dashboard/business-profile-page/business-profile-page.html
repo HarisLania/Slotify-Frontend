@@ -1,0 +1,59 @@
+<div class="max-w-xl">
+  <h1 class="text-2xl font-bold text-slate-900">Settings</h1>
+  <p class="mt-1 text-sm text-slate-500">Manage your business profile.</p>
+
+  @if (loading()) {
+    <app-spinner />
+  } @else {
+    <div class="mt-6 rounded-xl bg-white p-6 shadow-sm">
+      <p class="text-sm font-medium text-slate-700">Public booking page</p>
+      <div class="mt-1 flex items-center gap-2">
+        <input
+          type="text"
+          readonly
+          [value]="bookingUrl()"
+          class="flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-600"
+        />
+        <app-button variant="outline" size="sm" (click)="copyBookingUrl()">Copy</app-button>
+      </div>
+    </div>
+
+    <form class="mt-6 space-y-5 rounded-xl bg-white p-6 shadow-sm" [formGroup]="form" (ngSubmit)="save()">
+      <div>
+        <label for="name" class="block text-sm font-medium text-slate-700">Business name</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+        />
+        <app-field-error [control]="form.controls.name" />
+      </div>
+
+      <div>
+        <label for="timezone" class="block text-sm font-medium text-slate-700">Timezone</label>
+        <select
+          id="timezone"
+          formControlName="timezone"
+          class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+        >
+          @for (tz of timezones; track tz) {
+            <option [value]="tz">{{ tz }}</option>
+          }
+        </select>
+      </div>
+
+      <div>
+        <label for="address" class="block text-sm font-medium text-slate-700">Address</label>
+        <input
+          id="address"
+          type="text"
+          formControlName="address"
+          class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+        />
+      </div>
+
+      <app-button type="submit" [loading]="saving()">Save changes</app-button>
+    </form>
+  }
+</div>

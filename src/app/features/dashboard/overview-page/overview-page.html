@@ -1,0 +1,126 @@
+<div>
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-900">
+        Good day, {{ auth.currentUser()?.username }} 👋
+      </h1>
+      <p class="text-sm text-slate-500">{{ today | date: 'EEEE, MMMM d, y' }}</p>
+    </div>
+    @if (businessService.business(); as biz) {
+      <a
+        [routerLink]="['/book', biz.slug]"
+        target="_blank"
+        class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700"
+      >
+        View booking page
+      </a>
+    }
+  </div>
+
+  @if (loading()) {
+    <app-spinner />
+  } @else {
+    <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="rounded-xl bg-white p-5 shadow-sm">
+        <p class="text-3xl font-bold text-slate-900">{{ todaysAppointments().length }}</p>
+        <p class="text-sm text-slate-500">Today</p>
+      </div>
+      <div class="rounded-xl bg-white p-5 shadow-sm">
+        <p class="text-3xl font-bold text-slate-900">{{ weekCount() }}</p>
+        <p class="text-sm text-slate-500">This week</p>
+      </div>
+      <div class="rounded-xl bg-white p-5 shadow-sm">
+        <p class="text-3xl font-bold text-slate-900">{{ cancellationCount() }}</p>
+        <p class="text-sm text-slate-500">Cancellations (MTD)</p>
+      </div>
+      <div class="rounded-xl bg-white p-5 shadow-sm">
+        <p class="text-3xl font-bold text-slate-900">{{ formatMoney(revenueMtd()) }}</p>
+        <p class="text-sm text-slate-500">Revenue (MTD)</p>
+      </div>
+    </div>
+
+    <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div class="rounded-xl bg-white p-5 shadow-sm lg:col-span-2">
+        <div class="flex items-center justify-between">
+          <h2 class="font-semibold text-slate-900">Today's Appointments</h2>
+          <a routerLink="/dashboard/bookings" class="text-sm font-semibold text-brand-600">View all</a>
+        </div>
+
+        @if (todaysAppointments().length === 0) {
+          <p class="mt-6 text-sm text-slate-500">No appointments today.</p>
+        } @else {
+          <ul class="mt-4 divide-y divide-slate-100">
+            @for (booking of todaysAppointments(); track booking.id) {
+              <li class="flex items-center gap-3 py-3">
+                <app-avatar [name]="booking.customer_name" size="sm" />
+                <div class="min-w-0 flex-1">
+                  <p class="truncate text-sm font-semibold text-slate-900">{{ booking.customer_name }}</p>
+                  <p class="truncate text-xs text-slate-500">
+                    {{ booking.service_name }} · {{ servicesById().get(booking.service)?.duration_minutes ?? '?' }} min
+                  </p>
+                </div>
+                <span class="text-sm text-slate-600">{{ formatTime(booking.start_time) }}</span>
+                <app-status-badge [status]="booking.status" />
+              </li>
+            }
+          </ul>
+        }
+      </div>
+
+      <div class="rounded-xl bg-white p-5 shadow-sm">
+        <div class="flex items-center justify-between">
+          <h2 class="font-semibold text-slate-900">
+            {{ selectedDate() | date: 'MMMM y' }}
+          </h2>
+          <div class="flex gap-1">
+            <button type="button" class="rounded p-1 hover:bg-slate-100" (click)="changeMonth(-1)">‹</button>
+            <button type="button" class="rounded p-1 hover:bg-slate-100" (click)="changeMonth(1)">›</button>
+          </div>
+        </div>
+
+        <div class="mt-3 grid grid-cols-7 gap-1 text-center text-xs text-slate-400">
+          <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+        </div>
+        <div class="mt-1 grid grid-cols-7 gap-1">
+          @for (cell of calendarCells(); track $index) {
+            @if (cell) {
+              <button
+                type="button"
+                (click)="selectDate(cell)"
+                class="relative aspect-square rounded-lg text-sm hover:bg-slate-100"
+                [class.bg-brand-600]="isSameDay(cell, selectedDate())"
+                [class.text-white]="isSameDay(cell, selectedDate())"
+              >
+                {{ cell.getDate() }}
+                @if (bookingDatesWithActivity().has(toIsoDate(cell)) && !isSameDay(cell, selectedDate())) {
+                  <span class="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-brand-500"></span>
+                }
+              </button>
+            } @else {
+              <span></span>
+            }
+          }
+        </div>
+
+        <div class="mt-6">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Staff on duty</p>
+          <ul class="mt-2 space-y-2">
+            @for (member of staffList(); track member.id) {
+              <li class="flex items-center gap-2">
+                <app-avatar [name]="member.user.first_name + ' ' + member.user.last_name" size="sm" />
+                <span class="flex-1 truncate text-sm text-slate-700">
+                  {{ member.user.first_name }} {{ member.user.last_name }}
+                </span>
+                <span
+                  class="h-2 w-2 rounded-full"
+                  [class.bg-emerald-500]="staffOnDuty().get(member.id)"
+                  [class.bg-slate-300]="!staffOnDuty().get(member.id)"
+                ></span>
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  }
+</div>

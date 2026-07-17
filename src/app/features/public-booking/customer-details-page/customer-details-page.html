@@ -1,0 +1,77 @@
+<div>
+  <h1 class="text-2xl font-bold text-slate-900">Your details</h1>
+  <p class="mt-1 text-slate-500">Almost there! Just a few details to confirm.</p>
+
+  @if (store.selectedService; as service) {
+    <div class="mt-6 rounded-xl bg-brand-50 p-5">
+      <p class="text-xs font-semibold uppercase tracking-wide text-brand-600">Booking summary</p>
+      <div class="mt-2 flex items-start justify-between">
+        <div>
+          <h3 class="font-semibold text-slate-900">{{ service.name }}</h3>
+          @if (store.selection().selectedSlot; as slot) {
+            <p class="text-sm text-slate-600">
+              {{ service.duration_minutes }} min · {{ formatDateLong(slot.startTime) }} · {{ formatTime(slot.startTime) }}
+            </p>
+          }
+          @if (store.resolvedStaff; as staffMember) {
+            <p class="text-sm text-slate-600">with {{ staffMember.name }}</p>
+          }
+        </div>
+        <span class="text-lg font-bold text-brand-700">{{ formatMoney(service.price) }}</span>
+      </div>
+    </div>
+  }
+
+  <form class="mt-6 space-y-5" [formGroup]="form" (ngSubmit)="submit()">
+    <div>
+      <label for="cd-name" class="block text-sm font-medium text-slate-700">Full name</label>
+      <input
+        id="cd-name"
+        type="text"
+        formControlName="customer_name"
+        placeholder="Your name"
+        class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+      />
+      <app-field-error [control]="form.controls.customer_name" />
+    </div>
+
+    <div>
+      <label for="cd-email" class="block text-sm font-medium text-slate-700">Email address</label>
+      <input
+        id="cd-email"
+        type="email"
+        formControlName="customer_email"
+        placeholder="you@email.com"
+        class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+      />
+      <app-field-error [control]="form.controls.customer_email" />
+    </div>
+
+    <div>
+      <label for="cd-phone" class="block text-sm font-medium text-slate-700">Phone number</label>
+      <input
+        id="cd-phone"
+        type="tel"
+        formControlName="customer_phone"
+        placeholder="+1 (555) 000-0000"
+        class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+      />
+      <app-field-error [control]="form.controls.customer_phone" />
+    </div>
+
+    <div>
+      <label for="cd-notes" class="block text-sm font-medium text-slate-700">
+        Notes <span class="font-normal text-slate-400">(optional)</span>
+      </label>
+      <textarea
+        id="cd-notes"
+        rows="3"
+        formControlName="notes"
+        placeholder="Any requests or things we should know…"
+        class="mt-1 block w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+      ></textarea>
+    </div>
+
+    <app-button type="submit" variant="accent" full [loading]="submitting()">Confirm booking</app-button>
+  </form>
+</div>

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx ng *)",
+      "Bash(pkill -f \"ng serve\")",
+      "Bash(pkill -f \"port 4300\")",
+      "Bash(curl -s \"http://127.0.0.1:8000/api/public/demo-salon/slots/?staff=1&service=1&date=2026-07-20\" -w \"\\\\nSTATUS:%{http_code}\\\\n\")",
+      "Bash(curl -s -X POST http://127.0.0.1:8000/api/public/demo-salon/bookings/ -H 'Content-Type: application/json' -d '{\"service\":1,\"staff\":1,\"start_time\":\"2026-07-20T09:00:00Z\",\"customer_name\":\"Jane Doe\",\"customer_email\":\"jane@example.com\",\"customer_phone\":\"+15551234567\",\"notes\":\"test note\"}' -w '\\\\nSTATUS:%{http_code}\\\\n')",
+      "Bash(curl -s http://127.0.0.1:8000/api/bookings/ -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg0MjQ1MDkwLCJpYXQiOjE3ODQyNDE0OTAsImp0aSI6IjFiY2U1NDgwZTMwZTRkYjFiMzhjZGQyYmUwYTMxMTA3IiwidXNlcl9pZCI6Mn0.E0GGZBlysOYgoQ8Fdqr8Ga-tCJbWg74ZBGiFIBO1x5Y' -w '\\\\nSTATUS:%{http_code}\\\\n')",
+      "Bash(curl -s -X PATCH http://127.0.0.1:8000/api/bookings/1/status/ -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg0MjQ1MDkwLCJpYXQiOjE3ODQyNDE0OTAsImp0aSI6IjFiY2U1NDgwZTMwZTRkYjFiMzhjZGQyYmUwYTMxMTA3IiwidXNlcl9pZCI6Mn0.E0GGZBlysOYgoQ8Fdqr8Ga-tCJbWg74ZBGiFIBO1x5Y' -H 'Content-Type: application/json' -d '{\"status\":\"confirmed\"}' -w '\\\\nSTATUS:%{http_code}\\\\n')",
+      "Bash(curl -s http://127.0.0.1:8000/api/auth/me/ -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg0MjQ1MDkwLCJpYXQiOjE3ODQyNDE0OTAsImp0aSI6IjFiY2U1NDgwZTMwZTRkYjFiMzhjZGQyYmUwYTMxMTA3IiwidXNlcl9pZCI6Mn0.E0GGZBlysOYgoQ8Fdqr8Ga-tCJbWg74ZBGiFIBO1x5Y' -w '\\\\nSTATUS:%{http_code}\\\\n')"
+    ]
+  }
+}
